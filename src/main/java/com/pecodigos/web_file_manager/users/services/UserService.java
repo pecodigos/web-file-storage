@@ -26,7 +26,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User saveUser(UserDTO userDTO) {
+    public User registerUser(UserDTO userDTO) {
         var user = User.builder()
                 .name(userDTO.name())
                 .username(userDTO.username())

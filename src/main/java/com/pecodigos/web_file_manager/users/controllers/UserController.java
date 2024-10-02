@@ -1,5 +1,6 @@
 package com.pecodigos.web_file_manager.users.controllers;
 
+import com.pecodigos.web_file_manager.users.dtos.RegisterDTO;
 import com.pecodigos.web_file_manager.users.dtos.UserDTO;
 import com.pecodigos.web_file_manager.users.entities.User;
 import com.pecodigos.web_file_manager.users.services.UserService;
@@ -34,7 +35,6 @@ public class UserController {
                 user.getName(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getPassword(), // NEED TO CHANGE -> After register implementation remove password from UserDTO, future Pedro
                 user.getRole()
         );
 
@@ -54,7 +54,6 @@ public class UserController {
                         user.getName(),
                         user.getUsername(),
                         user.getEmail(),
-                        user.getPassword(), // ALSO NEED TO BE CHANGED -> TODO
                         user.getRole()
                 ))
                 .toList();
@@ -63,9 +62,9 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Object> registerUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody RegisterDTO registerDTO) {
         try {
-            var user = userService.registerUser(userDTO);
+            var user = userService.registerUser(registerDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -73,9 +72,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable(name = "id") UUID id, @Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> updateUser(@PathVariable(name = "id") UUID id, @Valid @RequestBody RegisterDTO registerDTO) {
         try {
-            var updatedUser = userService.updateUser(id, userDTO);
+            var updatedUser = userService.updateUser(id, registerDTO);
             return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

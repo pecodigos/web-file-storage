@@ -1,5 +1,6 @@
 package com.pecodigos.web_file_manager.users.services;
 
+import com.pecodigos.web_file_manager.users.dtos.RegisterDTO;
 import com.pecodigos.web_file_manager.users.dtos.UserDTO;
 import com.pecodigos.web_file_manager.users.entities.User;
 import com.pecodigos.web_file_manager.users.enums.Role;
@@ -26,13 +27,13 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User registerUser(UserDTO userDTO) {
+    public User registerUser(RegisterDTO registerDTO) {
         var user = User.builder()
-                .name(userDTO.name())
-                .username(userDTO.username())
-                .email(userDTO.email())
-                .password(userDTO.password())
-                .role(userDTO.role())
+                .name(registerDTO.name())
+                .username(registerDTO.username())
+                .email(registerDTO.email())
+                .password(registerDTO.password())
+                .role(registerDTO.role())
                 .build();
 
         if (user.getRole() == null) {
@@ -41,17 +42,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(UUID id, UserDTO userDTO) {
+    public User updateUser(UUID id, RegisterDTO registerDTO) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
             throw new NoSuchElementException("User not found.");
         }
         var user = optionalUser.get();
-        user.setName(userDTO.name());
-        user.setUsername(userDTO.username());
-        user.setEmail(userDTO.email());
-        user.setPassword(userDTO.password());
+        user.setName(registerDTO.name());
+        user.setUsername(registerDTO.username());
+        user.setEmail(registerDTO.email());
+        user.setPassword(registerDTO.password());
+        user.setRole(registerDTO.role());
 
         return userRepository.save(user);
     }

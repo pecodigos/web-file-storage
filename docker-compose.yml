@@ -1,10 +1,10 @@
 services:
   postgresql:
-    container_name: web_file_manager
+    container_name: web_file_storage
     image: postgres
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=web_file_manager
+      - POSTGRES_DB=web_file_storage

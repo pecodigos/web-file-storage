@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pecodigos</groupId>
-    <artifactId>web_file_manager</artifactId>
+    <artifactId>web_file_storage</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>web_file_manager</name>
-    <description>web_file_manager</description>
+    <description>web_file_storage</description>
     <url/>
     <licenses>
         <license/>

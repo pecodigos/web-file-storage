@@ -34,8 +34,18 @@ public class FileService {
         }
 
         Path targetLocation = this.fileStorageLocation.resolve(fileName);
-
         Files.copy(file.getInputStream(), targetLocation);
+
+        // Persist data
+        var fileEntity = File.builder()
+                .name(fileName)
+                .path(targetLocation.toString())
+                .size(file.getSize())
+                .mimeType(file.getContentType())
+                .uploadDate(LocalDate.now())
+                .build();
+
+        fileRepository.save(fileEntity);
 
         return new FileDTO(
                 fileName,

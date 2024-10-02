@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -28,8 +28,7 @@ public class File implements Serializable {
     private long size;
     private String mimeType;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date uploadDate;
+    private LocalDate uploadDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

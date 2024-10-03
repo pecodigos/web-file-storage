@@ -2,9 +2,9 @@
 
 :root {
     --bg-color: #221D23;
-    --text-color: #e3d2aa;
-    --upload-color: #775144;
-    --a-color: #C09891;
+    --upload-color: #e3d2aa;
+    --a-color: #775144;
+    --text-color: #C09891;
     --hover-color: #dcc266;
 }
 
@@ -20,24 +20,71 @@ a {
     color: var(--a-color);
 }
 
+a:hover {
+    color: var(--text-color);
+}
+
+p {
+    font-size: 1.1rem;
+}
+
 .index-header {
     background-color: var(--bg-color);
     color: var(--text-color);
-    padding-top: 2.5%;
-    padding-left: 4%;
+    padding: 2.5% 6%;
     font-size: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login-register {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .main-container {
     background-color: var(--bg-color);
     color: var(--text-color);
-    height: 95vh;
-    width: 100vw;
+    height: 81.5vh;
     padding: 3%;
     display: flex;
     box-sizing: border-box;
     flex-direction: column;
     align-items: center;
+}
+
+.login-form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    align-items: center;
+    border-radius: 1rem;
+    border: 0.125rem solid var(--upload-color);
+    padding: 3rem 6rem;
+}
+
+.sub-login-form-section {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.names-div {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.inputs-div {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.register-title {
+    font-size: 2rem;
 }
 
 .upload-section {
@@ -77,5 +124,7 @@ a {
     background-color: var(--bg-color);
     color: var(--text-color);
     gap: 0.2rem;
-    padding-left: 3%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 0.8rem;
 }

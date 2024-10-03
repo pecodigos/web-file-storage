@@ -86,6 +86,7 @@ p {
     display: flex;
     gap: 1rem;
     align-items: center;
+    justify-content: center;
 }
 
 .names-div {
@@ -98,6 +99,16 @@ p {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+
+#usernameInput, #nameInput, #emailInput, #passwordInput {
+    width: 20rem;
+    height: 1.5rem;
+    font-size: 1rem;
+    background-color: var(--buttons-color);
+    border: transparent;
+    color: var(--upload-color);
+    padding-left: 0.3rem;
 }
 
 .register-title {

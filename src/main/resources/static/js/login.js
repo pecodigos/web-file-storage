@@ -2,22 +2,21 @@ document.querySelector("button[type='submit']").addEventListener("click", async 
     event.preventDefault();
 
     // Get form input values
-    const username = document.getElementById("usernameInputLogin").value;
-    const password = document.getElementById("passwordInputLogin").value;
+    const username = document.getElementById("usernameInput").value;
+    const password = document.getElementById("passwordInput").value;
 
-    // Create the request payload
-    const loginData = {
-        username: username,
-        password: password
-    };
+    // Creating the request payload
+    const formData = new URLSearchParams();
+    formData.append('username', username);
+    formData.append('password', password);
 
     try {
         const response = await fetch("http://localhost:8080/user/login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: JSON.stringify(loginData)
+            body: formData.toString()
         });
 
         if (response.ok) {

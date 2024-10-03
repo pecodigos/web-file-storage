@@ -34,6 +34,12 @@ public class FileService {
         }
 
         Path targetLocation = this.fileStorageLocation.resolve(fileName);
+
+        if (Files.exists(targetLocation)) {
+            fileName = System.currentTimeMillis() + "_" + fileName;
+            targetLocation = this.fileStorageLocation.resolve(fileName);
+        }
+
         Files.copy(file.getInputStream(), targetLocation);
 
         // Persist data

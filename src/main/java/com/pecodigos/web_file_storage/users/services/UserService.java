@@ -1,5 +1,6 @@
 package com.pecodigos.web_file_storage.users.services;
 
+import com.pecodigos.web_file_storage.users.dtos.LoginDTO;
 import com.pecodigos.web_file_storage.users.dtos.RegisterDTO;
 import com.pecodigos.web_file_storage.users.entities.User;
 import com.pecodigos.web_file_storage.users.enums.Role;
@@ -24,6 +25,21 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public User loginUser(LoginDTO loginDTO) {
+        Optional<User> optionalUser = userRepository.findByUsername(loginDTO.username());
+
+        if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("Invalid username or password.");
+        }
+        var user = optionalUser.get();
+
+        if (!loginDTO.password().equals(user.getPassword())) {
+            throw new IllegalArgumentException("Invalid username or password.");
+        }
+
+        return user;
     }
 
     public User registerUser(RegisterDTO registerDTO) {

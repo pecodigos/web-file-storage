@@ -1,19 +1,19 @@
 package com.pecodigos.web_file_storage.users.controllers;
 
+import com.pecodigos.web_file_storage.users.dtos.LoginDTO;
 import com.pecodigos.web_file_storage.users.dtos.RegisterDTO;
 import com.pecodigos.web_file_storage.users.dtos.UserDTO;
 import com.pecodigos.web_file_storage.users.entities.User;
 import com.pecodigos.web_file_storage.users.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")
@@ -61,7 +61,23 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userDTOList);
     }
 
-    @PostMapping("/")
+    @PostMapping("/login")
+    public ResponseEntity<Object> loginUser(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request) {
+        try {
+            var user = userService.loginUser(loginDTO);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+
+            return ResponseEntity.ok().body("Login successful!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody RegisterDTO registerDTO) {
         try {
             var user = userService.registerUser(registerDTO);

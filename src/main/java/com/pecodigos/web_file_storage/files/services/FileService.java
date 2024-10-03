@@ -5,6 +5,7 @@ import com.pecodigos.web_file_storage.exceptions.InvalidFileNameException;
 import com.pecodigos.web_file_storage.files.dtos.FileDTO;
 import com.pecodigos.web_file_storage.files.entities.File;
 import com.pecodigos.web_file_storage.files.repositories.FileRepository;
+import com.pecodigos.web_file_storage.users.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +27,7 @@ public class FileService {
 
     private final Path fileStorageLocation = Paths.get("uploads").toAbsolutePath().normalize();
 
-    public FileDTO uploadFile(MultipartFile file) throws IOException {
+    public FileDTO uploadFile(MultipartFile file, User user) throws IOException {
         String fileName = file.getOriginalFilename();
 
         if (fileName == null || fileName.contains("..")) {
@@ -49,6 +50,7 @@ public class FileService {
                 .size(file.getSize())
                 .mimeType(file.getContentType())
                 .uploadDate(LocalDate.now())
+                .user(user)
                 .build();
 
         fileRepository.save(fileEntity);

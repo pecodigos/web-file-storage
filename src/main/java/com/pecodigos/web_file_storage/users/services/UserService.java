@@ -6,6 +6,9 @@ import com.pecodigos.web_file_storage.users.entities.User;
 import com.pecodigos.web_file_storage.users.enums.Role;
 import com.pecodigos.web_file_storage.users.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,16 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public User getCurrentUser() {
+        return userRepository
+                .findByUsername(SecurityContextHolder
+                        .getContext()
+                        .getAuthentication().getName())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+    }
 
     public Optional<User> getUserById(UUID id) {
         return userRepository.findById(id);
@@ -35,7 +48,7 @@ public class UserService {
         }
         var user = optionalUser.get();
 
-        if (!loginDTO.password().equals(user.getPassword())) {
+        if (!passwordEncoder.matches(loginDTO.password(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid username or password.");
         }
 
@@ -47,13 +60,10 @@ public class UserService {
                 .name(registerDTO.name())
                 .username(registerDTO.username())
                 .email(registerDTO.email())
-                .password(registerDTO.password())
-                .role(registerDTO.role())
+                .password(passwordEncoder.encode(registerDTO.password()))
+                .role(registerDTO.role() != null ? registerDTO.role() : Role.COMMON)
                 .build();
 
-        if (user.getRole() == null) {
-            user.setRole(Role.COMMON);
-        }
         return userRepository.save(user);
     }
 

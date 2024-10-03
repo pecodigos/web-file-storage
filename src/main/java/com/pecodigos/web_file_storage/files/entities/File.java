@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @Table(name = "tb_files")
 public class File implements Serializable {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

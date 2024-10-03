@@ -1,5 +1,6 @@
 package com.pecodigos.web_file_storage.users.entities;
 
+import com.pecodigos.web_file_storage.files.entities.File;
 import com.pecodigos.web_file_storage.users.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -13,6 +14,7 @@ import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -42,4 +44,7 @@ public class User implements Serializable {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<File> files;
 }

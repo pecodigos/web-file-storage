@@ -7,23 +7,30 @@
 </head>
 <body>
 <header class="index-header">
-    <h1>web file storage.</h1>
+    <div class="title-header">
+        <img id="box-image" src="assets/box.png" alt="Box icon">
+        <h1>web file storage</h1>
+    </div>
     <a onclick="logout()">logout</a>
 </header>
 <main class="main-container">
-    <section class="upload-section">
-        <div class="upload-title">
-            <h2>Select the file you want to upload</h2>
-        </div>
-        <div class="upload-divs">
-            <input type="file" id="fileInput" class="file-input">
-            <button class="upload-button" type="button" id="uploadButton">Upload</button>
-        </div>
+    <section class="files-section">
+        <h2>Your files</h2>
+        <section class="upload-section">
+            <div class="upload-title">
+                <h2>Select the file you want to upload</h2>
+            </div>
+            <div class="upload-divs">
+                <input type="file" id="fileInput" class="file-input">
+                <button class="upload-button" type="button" id="uploadButton">Upload</button>
+            </div>
+        </section>
     </section>
 </main>
 <footer class="index-footer">
     Made by <a href="github.com/pecodigos"> /pecodigos</a>
 </footer>
 <script src="js/upload_file.js"></script>
+<script src="js/logout.js"></script>
 </body>
 </html>

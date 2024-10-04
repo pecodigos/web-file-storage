@@ -8,7 +8,7 @@ document.getElementById("uploadButton").addEventListener("click", function() {
 
         fetch('/api/files/upload', {
             method: 'POST',
-            body: formData,
+            body: formData.toString(),
         })
         .then(response => {
             if (response.ok) {

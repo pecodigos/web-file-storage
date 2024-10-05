@@ -20,7 +20,6 @@ document.querySelector("button[type='submit']").addEventListener("click", async 
         });
 
         if (response.ok) {
-            alert("Login successful!");
             window.location.href = "storage.html";
         } else {
             const errorData = await response.json();

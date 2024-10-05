@@ -137,6 +137,7 @@ p {
     align-items: center;
     height: 35rem;
     width: 80rem;
+    justify-content: space-between;
 }
 
 .upload-section {
@@ -167,6 +168,26 @@ p {
     display: flex;
     gap: 0.6rem;
 }
+
+#file-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#file-list li {
+    margin: 10px 0;
+}
+
+#file-list li a {
+    text-decoration: none;
+    color: #f0a;
+    font-size: 1.2em;
+}
+
+#file-list li a:hover {
+    text-decoration: underline;
+}
+
 
 #box-image {
     width: 3.7rem;

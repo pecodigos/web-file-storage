@@ -7,17 +7,15 @@ import com.pecodigos.web_file_storage.files.entities.File;
 import com.pecodigos.web_file_storage.files.repositories.FileRepository;
 import com.pecodigos.web_file_storage.users.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class FileService {
@@ -56,10 +54,29 @@ public class FileService {
         fileRepository.save(fileEntity);
 
         return new FileDTO(
-                fileName,
-                file.getSize(),
-                LocalDate.now().toString()
+                fileEntity.getName(),
+                fileEntity.getPath(),
+                fileEntity.getSize(),
+                LocalDate.now()
         );
+    }
+
+    public Resource loadFileAsResource(String fileName, String username) throws IOException {
+        var file = fileRepository.findByName(fileName)
+                .orElseThrow(() -> new FileNotFoundException("File not found with name: " + fileName));
+
+        if (!file.getUser().getUsername().equals(username)) {
+            throw new AccessDeniedException("You do not have permission to access this file.");
+        }
+
+        Path filePath = Paths.get(file.getPath()).normalize();
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (!resource.exists()) {
+            throw new NoSuchFileException("File not found: " + filePath);
+        }
+
+        return resource;
     }
 
     public FileDTO getFileById(Long id) {
@@ -68,28 +85,25 @@ public class FileService {
 
         return new FileDTO(
                 file.getName(),
+                file.getPath(),
                 file.getSize(),
-                file.getUploadDate().toString()
+                file.getUploadDate()
         );
     }
 
-    public List<FileDTO> listAllFiles() {
-       List<File> fileList = fileRepository.findAll();
+    public List<FileDTO> listAllFiles(String username) {
+       List<File> fileList = fileRepository.findByUserUsername(username);
 
        return fileList.stream().map(file -> new FileDTO(
                file.getName(),
+               file.getPath(),
                file.getSize(),
-               file.getUploadDate().toString()
+               file.getUploadDate()
        )).toList();
     }
 
     public void deleteFile(Long id) {
-        Optional<File> file = fileRepository.findById(id);
-
-        if (file.isEmpty()) {
-            throw new NoSuchElementException("File not found.");
-        }
-
-        fileRepository.delete(file.get());
+        fileRepository.findById(id).orElseThrow(() -> new FileNotFoundException("File not found."));
+        fileRepository.deleteById(id);
     }
 }

@@ -25,7 +25,6 @@ document.querySelector("button[type='submit']").addEventListener("click", async 
         });
 
         if (response.ok) {
-            alert("Registration successful!");
             window.location.href = "login.html";
         } else {
             const errorData = await response.json();

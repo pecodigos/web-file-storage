@@ -138,6 +138,7 @@ p {
     height: 35rem;
     width: 80rem;
     justify-content: space-between;
+    overflow: scroll;
 }
 
 .upload-section {
@@ -172,6 +173,8 @@ p {
 #file-list {
     list-style-type: none;
     padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 #file-list li {

@@ -1,4 +1,5 @@
-document.querySelector("button[type='submit']").addEventListener("click", async (event) => {
+// Function to handle login
+async function handleLogin(event) {
     event.preventDefault();
 
     // Get form input values
@@ -28,5 +29,15 @@ document.querySelector("button[type='submit']").addEventListener("click", async 
     } catch (error) {
         console.error("Error during login:", error);
         alert("An error occurred. Please try again later.");
+    }
+}
+
+document.querySelector("button[type='submit']").addEventListener("click", handleLogin);
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        handleLogin(event)
+            .then(() => console.log("Login attempt made"))
+            .catch((error) => console.error("Error during login:", error));
     }
 });

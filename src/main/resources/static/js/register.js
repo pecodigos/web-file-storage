@@ -1,4 +1,5 @@
-document.querySelector("button[type='submit']").addEventListener("click", async (event) => {
+// Function to handle registration
+async function handleRegistration(event) {
     event.preventDefault(); // Prevent form submission
 
     // Get form input values
@@ -33,5 +34,15 @@ document.querySelector("button[type='submit']").addEventListener("click", async 
     } catch (error) {
         console.error("Error during registration:", error);
         alert("An error occurred. Please try again later.");
+    }
+}
+
+document.querySelector("button[type='submit']").addEventListener("click", handleRegistration);
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        handleRegistration(event)
+            .then(() => console.log("Registration attempt made"))
+            .catch((error) => console.error("Error during registration:", error));
     }
 });

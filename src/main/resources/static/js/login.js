@@ -21,8 +21,9 @@ async function handleLogin(event) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log("Response Data:", data); // Add this line for debugging
+            console.log("Response Data:", data);
             localStorage.setItem('jwtToken', data.token);
+            console.log("JWT token data: ", data.token);
             window.location.href = "storage.html";
         } else {
             const errorData = response.headers.get("Content-Type") === "application/json"

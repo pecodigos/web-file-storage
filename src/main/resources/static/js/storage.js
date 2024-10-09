@@ -38,7 +38,6 @@ async function loadFiles() {
     try {
         const response = await fetch('/api/files/', {
             method: 'GET',
-            credentials: 'include',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
             }

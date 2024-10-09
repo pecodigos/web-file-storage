@@ -7,6 +7,8 @@
     --a-color: #775144;
     --text-color: #C09891;
     --hover-color: #6b5b6b;
+    --border-color: rgba(243, 222, 173, 0.4);
+;
 }
 
 * {
@@ -79,7 +81,7 @@ p {
     gap: 4rem;
     align-items: center;
     border-radius: 1rem;
-    border: 0.125rem solid var(--upload-color);
+    border: 0.125rem solid var(--border-color);
     padding: 2rem 15rem 3rem;
 }
 
@@ -125,7 +127,7 @@ p {
 
 .files-section {
     border-radius: 0.5rem;
-    border: 0.125rem solid var(--upload-color);
+    border: 0.125rem solid var(--border-color);
     padding: 0.6rem 1rem;
     gap: 1rem;
     display: flex;
@@ -139,7 +141,7 @@ p {
 
 .upload-section {
     border-radius: 0.5rem;
-    border: 0.125rem solid var(--upload-color);
+    border: 0.125rem solid var(--border-color);
     padding: 0.6rem 1rem;
     gap: 1rem;
     display: flex;

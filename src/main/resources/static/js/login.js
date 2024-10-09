@@ -1,16 +1,25 @@
 // Function to handle login
 async function handleLogin(event) {
-    event.preventDefault();
+    event.preventDefault(); // Prevent form submission
 
+    // Get username and password values from input fields
     const username = document.getElementById("usernameInput").value;
     const password = document.getElementById("passwordInput").value;
 
+    // Check if username or password is empty
+    if (!username || !password) {
+        alert("Please enter both username and password.");
+        return;
+    }
+
+    // Payload for the login request
     const payload = {
         username: username,
         password: password
     };
 
     try {
+        // Sending login request to the back-end
         const response = await fetch("http://localhost:8080/user/login", {
             method: "POST",
             headers: {
@@ -21,9 +30,10 @@ async function handleLogin(event) {
 
         if (response.ok) {
             const data = await response.json();
+
             console.log("Response Data:", data);
             localStorage.setItem('jwtToken', data.token);
-            console.log("JWT token data: ", data.token);
+
             window.location.href = "storage.html";
         } else {
             const errorData = response.headers.get("Content-Type") === "application/json"
@@ -37,7 +47,6 @@ async function handleLogin(event) {
     }
 }
 
-// Attach the handleLogin function to the submit button
 document.querySelector("button[type='submit']").addEventListener("click", handleLogin);
 
 // Allow Enter key to trigger the login function

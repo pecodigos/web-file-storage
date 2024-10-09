@@ -75,12 +75,36 @@ function displayFiles(files) {
         const listItem = document.createElement('li');
         const link = document.createElement('a');
 
+        // Create a link to download the file
         link.href = `/api/files/download/${file.name}`;
         link.textContent = file.name;
 
+        // Create a span to display the file size
+        const sizeSpan = document.createElement('span');
+        sizeSpan.textContent = ` (${formatFileSize(file.size)})`;
+        sizeSpan.style.marginLeft = '10px';
+
+        // Append the link and size to the list item
         listItem.appendChild(link);
+        listItem.appendChild(sizeSpan);
+
+        const separator = document.createElement('hr');
+        separator.style.border = '0.1rem solid rgba(243, 222, 173, 0.4)';
+        separator.style.width = "100%";
+        separator.style.margin = '0.2rem 0';
+
+        // Append the list item and separator to the file list
         fileList.appendChild(listItem);
+        fileList.appendChild(separator);
     });
+}
+
+// Function to format file size from bytes to a readable format
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return Math.round(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
 }
 
 // Load the files when the page loads

@@ -6,6 +6,7 @@ import com.pecodigos.web_file_storage.users.entities.User;
 import com.pecodigos.web_file_storage.users.enums.Role;
 import com.pecodigos.web_file_storage.users.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,12 +45,12 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByUsername(loginDTO.username());
 
         if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("Invalid username or password.");
+            throw new BadCredentialsException("Invalid username or password.");
         }
         var user = optionalUser.get();
 
         if (!passwordEncoder.matches(loginDTO.password(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid username or password.");
+            throw new BadCredentialsException("Invalid username or password.");
         }
 
         return user;

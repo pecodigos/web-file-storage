@@ -1,6 +1,7 @@
 // Function to handle login
 async function handleLogin(event) {
-    event.preventDefault(); // Prevent form submission
+    // Prevent default action for the button
+    event.preventDefault();
 
     // Get username and password values from input fields
     const username = document.getElementById("usernameInput").value;
@@ -19,7 +20,8 @@ async function handleLogin(event) {
     };
 
     try {
-        // Sending login request to the back-end
+        console.log("Payload being sent:", JSON.stringify(payload));
+
         const response = await fetch("http://localhost:8080/user/login", {
             method: "POST",
             headers: {
@@ -31,23 +33,26 @@ async function handleLogin(event) {
         if (response.ok) {
             const data = await response.json();
 
-            console.log("Response Data:", data);
-            localStorage.setItem('jwtToken', data.token);
-
-            window.location.href = "storage.html";
+            // Check if the token is received
+            if (data.token) {
+                localStorage.setItem('jwtToken', data.token);
+                window.location.href = "storage.html";
+            } else {
+                alert("Login failed. Please try again.");
+            }
         } else {
             const errorData = response.headers.get("Content-Type") === "application/json"
                 ? await response.json()
                 : { message: "Login failed. Please try again." };
-            alert(`Login failed: ${errorData.message}`);
+            alert(`${errorData.message}`);
         }
     } catch (error) {
-        console.error("Error during login:", error);
         alert("An error occurred. Please try again later.");
     }
 }
 
-document.querySelector("button[type='submit']").addEventListener("click", handleLogin);
+// Update the button selector to target the correct button
+document.getElementById("loginButton").addEventListener("click", handleLogin);
 
 // Allow Enter key to trigger the login function
 document.addEventListener("keydown", (event) => {

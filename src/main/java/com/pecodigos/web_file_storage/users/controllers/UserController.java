@@ -6,8 +6,6 @@ import com.pecodigos.web_file_storage.users.dtos.RegisterDTO;
 import com.pecodigos.web_file_storage.users.dtos.UserDTO;
 import com.pecodigos.web_file_storage.users.entities.User;
 import com.pecodigos.web_file_storage.users.services.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +27,7 @@ public class UserController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -77,6 +76,7 @@ public class UserController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password())
             );
+
             String jwtToken = jwtUtil.generateToken(authentication.getName());
 
             return ResponseEntity.ok().body(Collections.singletonMap("token", jwtToken));

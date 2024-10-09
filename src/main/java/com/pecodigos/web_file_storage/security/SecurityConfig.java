@@ -39,14 +39,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/css/**", "/js/**", "/index.html", "/assets/**",
-                                "/", "/login.html", "/register.html", "/user/login", "/user/register").permitAll()
+                                "/", "/login.html", "/register.html", "/user/login", "/user/register", "/storage.html").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, accessDeniedException) -> {
                     response.sendRedirect("/login.html");
-                }));
-
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                }))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

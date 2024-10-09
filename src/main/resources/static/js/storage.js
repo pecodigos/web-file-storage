@@ -1,3 +1,12 @@
+// Check if the user is authenticated
+function checkAuth() {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+        // Redirect to login if no token is found
+        window.location.href = "login.html";
+    }
+}
+
 // Upload button click event
 document.getElementById("uploadButton").addEventListener("click", async function() {
     const fileInput = document.getElementById("fileInput");
@@ -22,11 +31,12 @@ document.getElementById("uploadButton").addEventListener("click", async function
                 fileInput.value = "";
                 await loadFiles();
             } else {
-                await response.json();
+                const errorData = await response.json();
+                alert(errorData.message || "Failed to upload file.");
             }
         } catch (error) {
             console.error("Error uploading file: ", error);
-            alert(error.message);
+            alert("An error occurred while uploading the file.");
         }
     } else {
         alert("Please select a file to upload.");
@@ -47,14 +57,16 @@ async function loadFiles() {
             const files = await response.json();
             displayFiles(files);
         } else {
-            await response.json();
+            const errorData = await response.json();
+            alert(errorData.message || "Failed to load files.");
         }
     } catch (error) {
         console.error('Error loading files:', error);
-        alert(error.message);
+        alert("An error occurred while loading files.");
     }
 }
 
+// Display the list of files
 function displayFiles(files) {
     const fileList = document.getElementById('file-list');
     fileList.innerHTML = '';
@@ -72,4 +84,7 @@ function displayFiles(files) {
 }
 
 // Load the files when the page loads
-document.addEventListener('DOMContentLoaded', loadFiles);
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    loadFiles();
+});

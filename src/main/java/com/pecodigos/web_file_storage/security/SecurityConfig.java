@@ -1,24 +1,28 @@
 package com.pecodigos.web_file_storage.security;
 
+import com.pecodigos.web_file_storage.auth.JwtAuthenticationFilter;
+import com.pecodigos.web_file_storage.auth.JwtUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService;
-
-    public SecurityConfig(RetrieveUserService retrieveUserService) {
-        this.userDetailsService = retrieveUserService;
-    }
+    private final RetrieveUserService retrieveUserService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -26,35 +30,24 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.
-                authorizeHttpRequests(authorize -> authorize
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/css/**", "/js/**", "/index.html", "/assets/**").permitAll()
-                        .requestMatchers("/login.html", "/register.html", "/user/login", "/user/register").anonymous()
+                        .requestMatchers("/login.html", "/register.html", "/user/login", "/user/register").permitAll()
                         .anyRequest().authenticated()
-                )
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login.html")
-                        .loginProcessingUrl("/user/login")
-                        .defaultSuccessUrl("/storage.html", true)
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/user/logout")
-                        .logoutSuccessUrl("/user/login")
-                        .permitAll()
                 )
                 .exceptionHandling(exception -> exception.accessDeniedHandler((request, response, accessDeniedException) -> {
                     response.sendRedirect("/storage.html");
-                }))
-                .csrf(AbstractHttpConfigurer::disable);
+                }));
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

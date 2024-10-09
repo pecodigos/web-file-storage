@@ -1,5 +1,6 @@
 package com.pecodigos.web_file_storage.users.controllers;
 
+import com.pecodigos.web_file_storage.auth.JwtUtil;
 import com.pecodigos.web_file_storage.users.dtos.LoginDTO;
 import com.pecodigos.web_file_storage.users.dtos.RegisterDTO;
 import com.pecodigos.web_file_storage.users.dtos.UserDTO;
@@ -11,6 +12,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -21,6 +26,11 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUser(@PathVariable(value = "id") UUID id) {
@@ -62,30 +72,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> loginUser(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request) {
+    public ResponseEntity<Object> loginUser(@Valid @RequestBody LoginDTO loginDTO) {
         try {
-            var user = userService.loginUser(loginDTO);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password())
+            );
+            String jwtToken = jwtUtil.generateToken(authentication.getName());
 
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-
-            return ResponseEntity.ok().body("Login successful!");
-        } catch (IllegalArgumentException e) {
+            return ResponseEntity.ok().body(Collections.singletonMap("token", jwtToken));
+        } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logoutUser(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-
-        if (session != null) {
-            session.invalidate();
-        }
-
-        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/register")

@@ -2,28 +2,32 @@
 async function handleLogin(event) {
     event.preventDefault();
 
-    // Get form input values
     const username = document.getElementById("usernameInput").value;
     const password = document.getElementById("passwordInput").value;
 
-    // Creating the request payload
-    const formData = new URLSearchParams();
-    formData.append('username', username);
-    formData.append('password', password);
+    const payload = {
+        username: username,
+        password: password
+    };
 
     try {
         const response = await fetch("http://localhost:8080/user/login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
+                "Content-Type": "application/json"
             },
-            body: formData.toString()
+            body: JSON.stringify(payload)
         });
 
         if (response.ok) {
+            const data = await response.json();
+            console.log("Response Data:", data); // Add this line for debugging
+            localStorage.setItem('jwtToken', data.token);
             window.location.href = "storage.html";
         } else {
-            const errorData = await response.json();
+            const errorData = response.headers.get("Content-Type") === "application/json"
+                ? await response.json()
+                : { message: "Login failed. Please try again." };
             alert(`Login failed: ${errorData.message}`);
         }
     } catch (error) {
@@ -32,12 +36,13 @@ async function handleLogin(event) {
     }
 }
 
+// Attach the handleLogin function to the submit button
 document.querySelector("button[type='submit']").addEventListener("click", handleLogin);
 
+// Allow Enter key to trigger the login function
 document.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        handleLogin(event)
-            .then(() => console.log("Login attempt made"))
-            .catch((error) => console.error("Error during login:", error));
+        event.preventDefault();
+        handleLogin(event);
     }
 });

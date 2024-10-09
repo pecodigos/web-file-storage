@@ -1,5 +1,5 @@
 // Upload button click event
-document.getElementById("uploadButton").addEventListener("click", function() {
+document.getElementById("uploadButton").addEventListener("click", async function() {
     const fileInput = document.getElementById("fileInput");
     const file = fileInput.files[0];
 
@@ -7,30 +7,27 @@ document.getElementById("uploadButton").addEventListener("click", function() {
         const formData = new FormData();
         formData.append("file", file);
 
-        fetch('/api/files/upload', {
-            method: 'POST',
-            body: formData,
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('File upload failed.');
-                }
-            })
-            .then(data => {
-                console.log("File uploaded successfully: ", data);
-                fileInput.value = ""; // Clear input after successful upload
-                loadFiles().then(() => {
-                    console.log("Files loaded successfully!");
-
-                }).catch(err => {
-                    console.log("Error loading files: ", err);
-                });
-            })
-            .catch(error => {
-                console.error("Error uploading file: ", error);
+        try {
+            const response = await fetch('/api/files/upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                },
+                body: formData,
             });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("File uploaded successfully: ", data);
+                fileInput.value = "";
+                await loadFiles();
+            } else {
+                await response.json();
+            }
+        } catch (error) {
+            console.error("Error uploading file: ", error);
+            alert(error.message);
+        }
     } else {
         alert("Please select a file to upload.");
     }
@@ -38,16 +35,24 @@ document.getElementById("uploadButton").addEventListener("click", function() {
 
 // Load the list of files
 async function loadFiles() {
-    const response = await fetch('/api/files/', {
-        method: 'GET',
-        credentials: 'include'
-    });
+    try {
+        const response = await fetch('/api/files/', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+            }
+        });
 
-    if (response.ok) {
-        const files = await response.json();
-        displayFiles(files);
-    } else {
-        console.error('Failed to load files');
+        if (response.ok) {
+            const files = await response.json();
+            displayFiles(files);
+        } else {
+            await response.json();
+        }
+    } catch (error) {
+        console.error('Error loading files:', error);
+        alert(error.message);
     }
 }
 

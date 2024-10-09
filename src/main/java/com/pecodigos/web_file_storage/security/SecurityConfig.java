@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,12 +38,12 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/css/**", "/js/**", "/index.html", "/assets/**", "/").permitAll()
-                        .requestMatchers("/login.html", "/register.html", "/user/login", "/user/register").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/index.html", "/assets/**",
+                                "/", "/login.html", "/register.html", "/user/login", "/user/register").permitAll()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exception -> exception.accessDeniedHandler((request, response, accessDeniedException) -> {
-                    response.sendRedirect("/storage.html");
+                .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, accessDeniedException) -> {
+                    response.sendRedirect("/login.html");
                 }));
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

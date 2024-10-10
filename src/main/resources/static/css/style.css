@@ -9,6 +9,7 @@
     --text-color: #C09891;
     --hover-color: #6b5b6b;
     --border-color: rgba(243, 222, 173, 0.4);
+    --hover-list-color: #2c232c;
 }
 
 * {
@@ -190,6 +191,10 @@ p {
     gap: 0.6rem;
 }
 
+.text-index-page {
+
+}
+
 #file-list {
     list-style-type: none;
     padding: 0;
@@ -218,13 +223,6 @@ p {
     border-bottom: 0.1rem solid var(--border-color);
 }
 
-
-#file-list li a {
-    text-decoration: none;
-    color: #f0a;
-    font-size: 1.2em;
-}
-
 #file-list li a:hover {
     text-decoration: underline;
 }
@@ -235,12 +233,7 @@ p {
 }
 
 #file-list-table tr:hover {
-    background-color: var(--hover-color);
-}
-
-#file-list-table td a {
-    color: #f0a;
-    text-decoration: none;
+    background-color: var(--hover-list-color);
 }
 
 #file-list-table td a:hover {
@@ -253,7 +246,7 @@ p {
 }
 
 .main-section {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -285,7 +278,7 @@ p {
 }
 
 .delete-button:hover {
-    background-color: #a90404;
+    background-color: #940303;
 }
 
 .index-footer  {
@@ -296,3 +289,6 @@ p {
     justify-content: center;
     padding-bottom: 0.8rem;
 }
+
+
+

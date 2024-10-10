@@ -12,14 +12,24 @@
         <img id="box-image" src="assets/box.png" alt="Box icon">
         <h1>web file storage</h1>
     </div>
-    <a onclick="logout()">logout</a>
+    <a class="page-buttons" onclick="logout()">logout</a>
 </header>
 <main class="main-container-storage">
     <h2>Your files</h2>
     <section class="files-section">
-        <div>
-            <ul id="file-list"></ul>
-        </div>
+        <table id="file-list-table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Upload Date</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Rows will be dynamically populated here -->
+            </tbody>
+        </table>
     </section>
     <section class="upload-section">
         <div class="upload-title">
@@ -32,7 +42,7 @@
     </section>
 </main>
 <footer class="index-footer">
-    Made by <a href="github.com/pecodigos"> /pecodigos</a>
+    Made by <a href="https://github.com/pecodigos"> /pecodigos</a>
 </footer>
 <script src="js/storage.js"></script>
 <script src="js/logout.js"></script>

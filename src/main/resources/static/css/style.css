@@ -95,7 +95,7 @@ p {
     gap: 4rem;
     align-items: center;
     border-radius: 1rem;
-    border: 0.125rem solid var(--border-color);
+    border: 0.1rem solid var(--border-color);
     padding: 2rem 15rem 3rem;
     background-color: var(--box-color);
 }
@@ -143,21 +143,25 @@ p {
 .files-section {
     border-radius: 0.5rem;
     border: 0.125rem solid var(--border-color);
-    padding: 0.6rem 1rem;
-    gap: 1rem;
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: center;
     height: 30rem;
     width: 80rem;
     justify-content: space-between;
-    overflow: scroll;
+    overflow: auto;
     background-color: var(--box-color);
+}
+
+.files-infoname {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .upload-section {
     border-radius: 0.5rem;
-    border: 0.125rem solid var(--border-color);
+    border: 0.1rem solid var(--border-color);
     padding: 0.6rem 1rem;
     gap: 1rem;
     display: flex;
@@ -191,11 +195,29 @@ p {
     padding: 0;
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 #file-list li {
     margin: 10px 0;
 }
+
+#file-list-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#file-list-table thead {
+    background-color: var(--box-color);
+}
+
+#file-list-table th, #file-list-table td {
+    padding: 10px;
+    text-align: left;
+    color: var(--text-color);
+    border-bottom: 0.1rem solid var(--border-color);
+}
+
 
 #file-list li a {
     text-decoration: none;
@@ -207,6 +229,23 @@ p {
     text-decoration: underline;
 }
 
+#file-list-table th {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+#file-list-table tr:hover {
+    background-color: var(--hover-color);
+}
+
+#file-list-table td a {
+    color: #f0a;
+    text-decoration: none;
+}
+
+#file-list-table td a:hover {
+    text-decoration: underline;
+}
 
 #box-image {
     width: 3.7rem;
@@ -221,6 +260,32 @@ p {
     margin: 4rem;
     gap: 5rem;
     color: var(--text-color);
+}
+
+.page-buttons {
+    border-radius: 0.5rem;
+    border: 0.1rem solid var(--border-color);
+    padding: 0.6rem 1rem;
+    background-color: var(--box-color);
+}
+
+.page-buttons:hover {
+    background-color: var(--bg-color);
+}
+
+.delete-button {
+    background-color: #ce3e3e;
+    color: white;
+    border: none;
+    padding: 0.2rem 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 0.3rem;
+    margin-left: 1rem;
+}
+
+.delete-button:hover {
+    background-color: #a90404;
 }
 
 .index-footer  {

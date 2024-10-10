@@ -27,7 +27,6 @@ document.getElementById("uploadButton").addEventListener("click", async function
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("File uploaded successfully: ", data);
                 fileInput.value = "";
                 await loadFiles();
             } else {
@@ -66,37 +65,108 @@ async function loadFiles() {
     }
 }
 
-// Display the list of files
 function displayFiles(files) {
-    const fileList = document.getElementById('file-list');
-    fileList.innerHTML = '';
+    const fileTableBody = document.querySelector('#file-list-table tbody');
+    fileTableBody.innerHTML = '';
 
     files.forEach(file => {
-        const listItem = document.createElement('li');
-        const link = document.createElement('a');
+        const row = document.createElement('tr');
 
-        // Create a link to download the file
-        link.href = `/api/files/download/${file.name}`;
-        link.textContent = file.name;
+        const fileNameCell = document.createElement('td');
+        const fileNameText = document.createElement('span');
+        fileNameText.textContent = file.name;
+        fileNameCell.appendChild(fileNameText);
 
-        // Create a span to display the file size
-        const sizeSpan = document.createElement('span');
-        sizeSpan.textContent = ` (${formatFileSize(file.size)})`;
-        sizeSpan.style.marginLeft = '10px';
+        const fileSizeCell = document.createElement('td');
+        fileSizeCell.textContent = formatFileSize(file.size);
 
-        // Append the link and size to the list item
-        listItem.appendChild(link);
-        listItem.appendChild(sizeSpan);
+        const uploadDateCell = document.createElement('td');
+        uploadDateCell.textContent = new Date(file.uploadDate).toLocaleDateString();
 
-        const separator = document.createElement('hr');
-        separator.style.border = '0.1rem solid rgba(243, 222, 173, 0.4)';
-        separator.style.width = "100%";
-        separator.style.margin = '0.2rem 0';
+        const actionCell = document.createElement('td');
+        const downloadButton = document.createElement('button');
+        downloadButton.textContent = 'Download';
+        downloadButton.addEventListener('click', () => downloadFile(file.name));
+        actionCell.appendChild(downloadButton);
 
-        // Append the list item and separator to the file list
-        fileList.appendChild(listItem);
-        fileList.appendChild(separator);
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = 'x';
+        deleteButton.classList.add('delete-button');
+        deleteButton.addEventListener('click', async function () {
+            if (confirm(`Are you sure you want to delete file named "${file.name}?"`)) {
+                await deleteFile(file.id);
+            }
+        });
+        actionCell.appendChild(deleteButton);
+
+        // Append all cells to the row
+        row.appendChild(fileNameCell);
+        row.appendChild(fileSizeCell);
+        row.appendChild(uploadDateCell);
+        row.appendChild(actionCell);
+
+        // Append the row to the table body
+        fileTableBody.appendChild(row);
     });
+}
+
+
+// Function to handle file download
+async function downloadFile(fileName) {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch(`/api/files/download/${fileName}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            // Create a temporary link to trigger the download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            // Release the URL object
+            window.URL.revokeObjectURL(url);
+        } else {
+            alert('Failed to download the file.');
+        }
+    } catch (error) {
+        console.error('Error downloading file:', error);
+        alert("An error occurred while downloading the file.");
+    }
+}
+
+async function deleteFile(fileId) {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch(`/api/files/${fileId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            alert('File deleted successfully');
+            await loadFiles();
+        } else {
+            const errorData = await response.json();
+            alert(errorData.message || "Failed to delete the file.");
+        }
+    } catch (error) {
+        console.error('Error deleting file:', error);
+        alert("An error occurred while deleting the file.");
+    }
 }
 
 // Function to format file size from bytes to a readable format

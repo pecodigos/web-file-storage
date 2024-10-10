@@ -74,7 +74,26 @@ function displayFiles(files) {
 
         const fileNameCell = document.createElement('td');
         const fileNameText = document.createElement('span');
-        fileNameText.textContent = file.name;
+
+        const maxFileNameLength = 60;
+        const fileParts = file.name.split('.');
+
+        // Check if the file has an extension
+        if (fileParts.length > 1) {
+            const extension = fileParts.pop();
+            const namePart = fileParts.join('.');
+
+            // Truncate the name part if it exceeds the max length
+            fileNameText.textContent = namePart.length > maxFileNameLength
+                ? `${namePart.slice(0, maxFileNameLength - 2)}..` + '.' + extension
+                : file.name;
+        } else {
+            // If no extension, just check the name length
+            fileNameText.textContent = file.name.length > maxFileNameLength
+                ? `${file.name.slice(0, maxFileNameLength - 2)}..`
+                : file.name;
+        }
+
         fileNameCell.appendChild(fileNameText);
 
         const fileSizeCell = document.createElement('td');
@@ -85,14 +104,12 @@ function displayFiles(files) {
 
         const actionCell = document.createElement('td');
 
-        // Create a download button with an icon
         const downloadButton = document.createElement('button');
         downloadButton.innerHTML = '<i class="fas fa-download"></i>';
         downloadButton.classList.add('download-button');
         downloadButton.addEventListener('click', () => downloadFile(file.name));
         actionCell.appendChild(downloadButton);
 
-        // Create a delete button with an icon
         const deleteButton = document.createElement('button');
         deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
         deleteButton.classList.add('delete-button');
@@ -103,16 +120,15 @@ function displayFiles(files) {
         });
         actionCell.appendChild(deleteButton);
 
-        // Append all cells to the row
         row.appendChild(fileNameCell);
         row.appendChild(fileSizeCell);
         row.appendChild(uploadDateCell);
         row.appendChild(actionCell);
 
-        // Append the row to the table body
         fileTableBody.appendChild(row);
     });
 }
+
 
 // Function to handle file download
 async function downloadFile(fileName) {

@@ -23,7 +23,7 @@
                 <th>Name</th>
                 <th>Size</th>
                 <th>Upload Date</th>
-                <th>Action</th>
+                <th>Download or Delete file</th>
             </tr>
             </thead>
             <tbody>
@@ -36,8 +36,13 @@
             <h2>Select the file you want to upload</h2>
         </div>
         <div class="upload-divs">
-            <input type="file" id="fileInput" class="file-input">
-            <button class="upload-button" type="button" id="uploadButton">Upload</button>
+            <label for="fileInput" class="file-label">
+                <i class="fas fa-upload"></i> Browse
+            </label>
+            <input type="file" id="fileInput" class="file-input" style="display:none;">
+            <button class="upload-button" type="button" id="uploadButton">
+                <i class="fas fa-cloud-upload-alt"></i> Upload
+            </button>
         </div>
     </section>
 </main>

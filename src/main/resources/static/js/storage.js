@@ -26,7 +26,7 @@ document.getElementById("uploadButton").addEventListener("click", async function
             });
 
             if (response.ok) {
-                const data = await response.json();
+                await response.json();
                 fileInput.value = "";
                 await loadFiles();
             } else {
@@ -84,13 +84,17 @@ function displayFiles(files) {
         uploadDateCell.textContent = new Date(file.uploadDate).toLocaleDateString();
 
         const actionCell = document.createElement('td');
+
+        // Create a download button with an icon
         const downloadButton = document.createElement('button');
-        downloadButton.textContent = 'Download';
+        downloadButton.innerHTML = '<i class="fas fa-download"></i>';
+        downloadButton.classList.add('download-button');
         downloadButton.addEventListener('click', () => downloadFile(file.name));
         actionCell.appendChild(downloadButton);
 
+        // Create a delete button with an icon
         const deleteButton = document.createElement('button');
-        deleteButton.innerHTML = 'x';
+        deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
         deleteButton.classList.add('delete-button');
         deleteButton.addEventListener('click', async function () {
             if (confirm(`Are you sure you want to delete file named "${file.name}?"`)) {
@@ -109,7 +113,6 @@ function displayFiles(files) {
         fileTableBody.appendChild(row);
     });
 }
-
 
 // Function to handle file download
 async function downloadFile(fileName) {

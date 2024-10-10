@@ -1,4 +1,5 @@
-# Web File Storage
+# Web File Storage <img src="https://media.tenor.com/gHygBs_JkKwAAAAi/moving-boxes.gif" alt="moving boxes gif" width="50"/>
+
 
 ## Overview
 This project is a web-based file storage application that enables users to securely upload, retrieve, and delete files. The application features a user-friendly front end and implements JWT (JSON Web Token) authentication for secure access to user files. The backend is built using Spring Boot, while the front end utilizes HTML, CSS, and JavaScript.

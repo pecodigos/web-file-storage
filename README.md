@@ -1,4 +1,4 @@
-# Web File Storage Project
+# Web File Storage
 
 ## Overview
 This project is a web-based file storage application that enables users to securely upload, retrieve, and delete files. The application features a user-friendly front end and implements JWT (JSON Web Token) authentication for secure access to user files. The backend is built using Spring Boot, while the front end utilizes HTML, CSS, and JavaScript.

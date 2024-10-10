@@ -54,6 +54,7 @@ public class FileService {
         fileRepository.save(fileEntity);
 
         return new FileDTO(
+                fileEntity.getId(),
                 fileEntity.getName(),
                 fileEntity.getPath(),
                 fileEntity.getSize(),
@@ -84,6 +85,7 @@ public class FileService {
                 .orElseThrow(() -> new FileNotFoundException("File not found with id: " + id));
 
         return new FileDTO(
+                file.getId(),
                 file.getName(),
                 file.getPath(),
                 file.getSize(),
@@ -95,6 +97,7 @@ public class FileService {
        List<File> fileList = fileRepository.findByUserUsername(username);
 
        return fileList.stream().map(file -> new FileDTO(
+               file.getId(),
                file.getName(),
                file.getPath(),
                file.getSize(),

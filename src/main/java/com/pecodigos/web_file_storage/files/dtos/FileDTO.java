@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record FileDTO(@NotBlank String name, @NotBlank String path, @NotNull long size, @NotNull LocalDate uploadDate) {
+public record FileDTO(@NotNull Long id, @NotBlank String name, @NotBlank String path, @NotNull long size, @NotNull LocalDate uploadDate) {
 }

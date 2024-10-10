@@ -185,3 +185,21 @@ document.addEventListener('DOMContentLoaded', () => {
     checkAuth();
     loadFiles();
 });
+
+document.getElementById('fileInput').addEventListener('change', function() {
+    const file = this.files.length > 0 ? this.files[0].name : 'No file selected';
+    const fileParts = file.split('.');
+
+    // Ensure there's an extension
+    if (fileParts.length > 1) {
+        const namePart = fileParts[0];
+        const extension = fileParts[fileParts.length - 1];
+        let formattedName = namePart.length > 6 ? `${namePart.slice(0, 9)}..` : namePart;
+
+        // Set the formatted name with the extension
+        document.getElementById('fileName').textContent = `${formattedName}.${extension}`;
+    } else {
+        // Handle the case where there is no extension
+        document.getElementById('fileName').textContent = file;
+    }
+});

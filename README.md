@@ -3,6 +3,8 @@
 ## Overview
 This project is a web-based file storage application that enables users to securely upload, retrieve, and delete files. The application features a user-friendly front end and implements JWT (JSON Web Token) authentication for secure access to user files. The backend is built using Spring Boot, while the front end utilizes HTML, CSS, and JavaScript.
 
+![web file storage photo](https://i.imgur.com/Sr9Tv6y.png)
+
 ## Features
 - **User Registration**: New users can register and create an account.
 - **User Login**: Users can log in to access their files securely using JWT authentication.
@@ -23,7 +25,7 @@ This project is a web-based file storage application that enables users to secur
 ## Installation
 
 ### Prerequisites
-- Java 11 or higher
+- Java 17 or higher
 - Maven
 - Docker
 - (Database of choice)
@@ -75,9 +77,6 @@ This project is a web-based file storage application that enables users to secur
 - **Storage Page**:
     - Upload files through a simple form.
     - Display a list of uploaded files with options to download or delete each file.
-
-## Contribution
-Contributions are welcome! Please fork the repository and submit a pull request.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

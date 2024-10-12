@@ -45,9 +45,7 @@ public class SecurityConfig {
                                 "/", "/login.html", "/register.html", "/user/login", "/user/register", "/storage.html").permitAll()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, accessDeniedException) -> {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                }))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, accessDeniedException) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED)))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

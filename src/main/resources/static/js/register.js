@@ -27,7 +27,10 @@ async function handleRegistration(event) {
 
         if (response.ok) {
             window.location.href = "login.html";
-        } else {
+        } else if (response.status === 401) {
+            alert("Username or email already taken.");
+        }
+        else {
             const errorData = await response.json();
             alert(`Error: ${errorData.message}`);
         }

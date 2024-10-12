@@ -103,7 +103,7 @@ public class UserController {
             var updatedUser = userService.updateUser(id, registerDTO);
             return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
         }
     }
 

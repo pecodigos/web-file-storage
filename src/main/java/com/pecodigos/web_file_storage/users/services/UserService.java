@@ -1,5 +1,6 @@
 package com.pecodigos.web_file_storage.users.services;
 
+import com.pecodigos.web_file_storage.exceptions.UserAlreadyExistsException;
 import com.pecodigos.web_file_storage.users.dtos.LoginDTO;
 import com.pecodigos.web_file_storage.users.dtos.RegisterDTO;
 import com.pecodigos.web_file_storage.users.entities.User;
@@ -57,6 +58,14 @@ public class UserService {
     }
 
     public User registerUser(RegisterDTO registerDTO) {
+        if (userRepository.findByUsername(registerDTO.username()).isPresent()) {
+            throw new UserAlreadyExistsException("Username already taken.");
+        }
+
+        if (userRepository.findByEmail(registerDTO.email()).isPresent()) {
+            throw new UserAlreadyExistsException("Email already taken.");
+        }
+
         var user = User.builder()
                 .name(registerDTO.name())
                 .username(registerDTO.username())

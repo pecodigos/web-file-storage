@@ -55,14 +55,7 @@ public class FileService {
                 .build();
 
         fileRepository.save(fileEntity);
-
-        return new FileDTO(
-                fileEntity.getId(),
-                fileEntity.getName(),
-                fileEntity.getPath(),
-                fileEntity.getSize(),
-                LocalDate.now()
-        );
+        return fileMapper.toDto(fileEntity);
     }
 
     public Resource loadFileAsResource(String fileName, String username) throws IOException {
@@ -87,29 +80,27 @@ public class FileService {
         File file = fileRepository.findById(id)
                 .orElseThrow(() -> new FileNotFoundException("File not found with id: " + id));
 
-        return new FileDTO(
-                file.getId(),
-                file.getName(),
-                file.getPath(),
-                file.getSize(),
-                file.getUploadDate()
-        );
+        return fileMapper.toDto(file);
     }
 
-    public List<FileDTO> listAllFiles(String username) {
-       List<File> fileList = fileRepository.findByUserUsername(username);
+    public List<FileDTO> listAllUserFiles(String username) {
+        var files = fileRepository.findByUserUsername(username);
 
-       return fileList.stream().map(file -> new FileDTO(
-               file.getId(),
-               file.getName(),
-               file.getPath(),
-               file.getSize(),
-               file.getUploadDate()
-       )).toList();
+        return files.stream()
+                .map(fileMapper::toDto)
+                .toList();
     }
 
-    public void deleteFile(Long id) {
-        fileRepository.findById(id).orElseThrow(() -> new FileNotFoundException("File not found."));
-        fileRepository.deleteById(id);
+    public void deleteFile(Long id, String username) throws IOException {
+        var file = fileRepository.findById(id).orElseThrow(() -> new FileNotFoundException("File not found with id: " + id));
+
+        if (!file.getUser().getUsername().equals(username)) {
+            throw new AccessDeniedException("You do not have permission to delete this file.");
+        }
+
+        Path filePath = Paths.get(file.getPath()).normalize();
+        Files.deleteIfExists(filePath);
+
+        fileRepository.delete(file);
     }
 }

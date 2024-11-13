@@ -24,7 +24,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserDTO getCurrentUser() {
-        return userMapper.toDTO(userRepository
+        return userMapper.toDto(userRepository
                 .findByUsername(SecurityContextHolder
                         .getContext()
                         .getAuthentication().getName())
@@ -33,14 +33,14 @@ public class UserService {
 
     public UserDTO getUserById(UUID id) {
         return userRepository.findById(id)
-                .map(userMapper::toDTO)
+                .map(userMapper::toDto)
                 .orElseThrow(InvalidUserIdException::new);
     }
 
     public List<UserDTO> list() {
         return userRepository.findAll()
                 .stream()
-                .map(userMapper::toDTO)
+                .map(userMapper::toDto)
                 .toList();
     }
 
@@ -58,7 +58,7 @@ public class UserService {
                     data.setUsername(userDTO.username());
                     data.setEmail(userDTO.email());
                     data.setPassword(passwordEncoder.encode(userDTO.password()));
-                    return userMapper.toDTO(data);
+                    return userMapper.toDto(data);
                 }).orElseThrow(() -> new NoSuchElementException("No user found with that ID."));
     }
 }

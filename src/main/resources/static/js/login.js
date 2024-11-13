@@ -22,7 +22,7 @@ async function handleLogin(event) {
     try {
         console.log("Payload being sent:", JSON.stringify(payload));
 
-        const response = await fetch("/user/login", {
+        const response = await fetch("/api/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -32,7 +32,6 @@ async function handleLogin(event) {
 
         if (response.ok) {
             const data = await response.json();
-
             // Check if the token is received
             if (data.token) {
                 localStorage.setItem('jwtToken', data.token);

@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/css/**", "/js/**", "/index.html", "/assets/**",
-                                "/", "/login.html", "/register.html", "/user/login", "/user/register", "/storage.html").permitAll()
+                                "/", "/login.html", "/register.html", "/api/auth/login", "/api/auth/register", "/storage.html").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, accessDeniedException) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED)))

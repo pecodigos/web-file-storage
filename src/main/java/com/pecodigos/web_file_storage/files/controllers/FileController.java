@@ -47,12 +47,13 @@ public class FileController {
     @GetMapping("/")
     public ResponseEntity<List<FileDTO>> getAllFiles(Principal principal) {
         String username = principal.getName();
-        return ResponseEntity.ok(fileService.listAllFiles(username));
+        return ResponseEntity.ok(fileService.listAllUserFiles(username));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFile(@PathVariable(name = "id") Long id) {
-        fileService.deleteFile(id);
+    public ResponseEntity<Void> deleteFile(@PathVariable(name = "id") Long id, Principal principal) throws IOException {
+        String username = principal.getName();
+        fileService.deleteFile(id, username);
         return ResponseEntity.noContent().build();
     }
 }

@@ -40,6 +40,7 @@ public class User implements Serializable {
     @Length(min = 10, max = 100)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @CreationTimestamp

@@ -1,6 +1,7 @@
 package com.pecodigos.web_file_storage.users.controllers;
 
 import com.pecodigos.web_file_storage.auth.JwtUtil;
+import com.pecodigos.web_file_storage.users.dtos.AuthDTO;
 import com.pecodigos.web_file_storage.users.dtos.UserDTO;
 import com.pecodigos.web_file_storage.users.services.AuthService;
 import jakarta.validation.Valid;
@@ -23,10 +24,10 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> login(@RequestBody AuthDTO authDTO) {
         try {
-            var loggedInUser = authService.login(userDTO);
-            String token = jwtUtil.generateToken(userDTO.username());
+            var loggedInUser = authService.login(authDTO);
+            String token = jwtUtil.generateToken(authDTO.username());
 
             Map<String, String> response = new HashMap<>();
             response.put("token", token);

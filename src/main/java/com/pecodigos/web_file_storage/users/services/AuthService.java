@@ -3,6 +3,7 @@ package com.pecodigos.web_file_storage.users.services;
 import com.pecodigos.web_file_storage.auth.JwtUtil;
 import com.pecodigos.web_file_storage.exceptions.InvalidUsernameOrPasswordException;
 import com.pecodigos.web_file_storage.exceptions.UserAlreadyExistsException;
+import com.pecodigos.web_file_storage.users.dtos.AuthDTO;
 import com.pecodigos.web_file_storage.users.dtos.UserDTO;
 import com.pecodigos.web_file_storage.users.dtos.mapper.UserMapper;
 import com.pecodigos.web_file_storage.users.entities.User;
@@ -23,19 +24,19 @@ public class AuthService {
     private BCryptPasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public UserDTO login(UserDTO userDTO) {
-        var optionalUser = userRepository.findByUsername(userDTO.username());
+    public AuthDTO login(AuthDTO authDTO) {
+        var optionalUser = userRepository.findByUsername(authDTO.username());
 
         if (optionalUser.isEmpty()) {
             throw new InvalidUsernameOrPasswordException();
         }
         var user = optionalUser.get();
 
-        if (!passwordEncoder.matches(userDTO.password(), user.getPassword())) {
+        if (!passwordEncoder.matches(authDTO.password(), user.getPassword())) {
             throw new InvalidUsernameOrPasswordException();
         }
 
-        return userMapper.toDTO(user);
+        return userMapper.toAuthDto(user);
     }
 
     public UserDTO register(UserDTO userDTO) {
@@ -55,7 +56,7 @@ public class AuthService {
                 .role(Role.COMMON)
                 .build();
 
-        return userMapper.toDTO(userRepository.save(user));
+        return userMapper.toDto(userRepository.save(user));
     }
 
     public void delete(UUID id) {

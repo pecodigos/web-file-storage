@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record AuthDTO(@NotBlank @NotNull UUID id, @NotBlank @NotNull String username, @NotBlank @NotNull String email, @NotBlank @NotNull String password) {
+public record AuthDTO(@NotNull UUID id, @NotBlank @NotNull String username, @NotBlank @NotNull String password) {
 }

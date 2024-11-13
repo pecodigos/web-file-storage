@@ -1,4 +1,4 @@
-package com.pecodigos.web_file_storage.security;
+package com.pecodigos.web_file_storage.config.security;
 
 import com.pecodigos.web_file_storage.auth.JwtAuthenticationFilter;
 import com.pecodigos.web_file_storage.auth.JwtUtil;

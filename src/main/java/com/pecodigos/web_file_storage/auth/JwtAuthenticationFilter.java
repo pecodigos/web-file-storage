@@ -1,7 +1,7 @@
 package com.pecodigos.web_file_storage.auth;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.pecodigos.web_file_storage.security.RetrieveUserService;
+import com.pecodigos.web_file_storage.config.security.RetrieveUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_files")
+@Table(name = "files")
 public class File implements Serializable {
 
     @Id

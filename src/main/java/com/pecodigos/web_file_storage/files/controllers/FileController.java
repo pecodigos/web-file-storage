@@ -3,7 +3,7 @@ package com.pecodigos.web_file_storage.files.controllers;
 import com.pecodigos.web_file_storage.files.dtos.FileDTO;
 import com.pecodigos.web_file_storage.files.services.FileService;
 import com.pecodigos.web_file_storage.users.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +15,11 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/files")
 public class FileController {
 
-    @Autowired
     private FileService fileService;
-
-    @Autowired
     private UserService userService;
 
     @PostMapping("/upload")

@@ -22,7 +22,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_users")
+@Table(name = "users")
 public class User implements Serializable {
 
     @Id

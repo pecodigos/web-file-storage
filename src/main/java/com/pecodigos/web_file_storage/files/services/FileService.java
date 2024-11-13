@@ -3,10 +3,12 @@ package com.pecodigos.web_file_storage.files.services;
 import com.pecodigos.web_file_storage.exceptions.FileNotFoundException;
 import com.pecodigos.web_file_storage.exceptions.InvalidFileNameException;
 import com.pecodigos.web_file_storage.files.dtos.FileDTO;
+import com.pecodigos.web_file_storage.files.dtos.mapper.FileMapper;
 import com.pecodigos.web_file_storage.files.entities.File;
 import com.pecodigos.web_file_storage.files.repositories.FileRepository;
-import com.pecodigos.web_file_storage.users.entities.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pecodigos.web_file_storage.users.dtos.UserDTO;
+import com.pecodigos.web_file_storage.users.dtos.mapper.UserMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -18,14 +20,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class FileService {
 
-    @Autowired
     private FileRepository fileRepository;
+    private FileMapper fileMapper;
+    private UserMapper userMapper;
 
     private final Path fileStorageLocation = Paths.get("uploads").toAbsolutePath().normalize();
 
-    public FileDTO uploadFile(MultipartFile file, User user) throws IOException {
+    public FileDTO uploadFile(MultipartFile file, UserDTO userDTO) throws IOException {
         String fileName = file.getOriginalFilename();
 
         if (fileName == null || fileName.contains("..")) {
@@ -41,14 +45,13 @@ public class FileService {
 
         Files.copy(file.getInputStream(), targetLocation);
 
-        // Persist data
         var fileEntity = File.builder()
                 .name(fileName)
                 .path(targetLocation.toString())
                 .size(file.getSize())
                 .mimeType(file.getContentType())
                 .uploadDate(LocalDate.now())
-                .user(user)
+                .user(userMapper.toEntity(userDTO))
                 .build();
 
         fileRepository.save(fileEntity);

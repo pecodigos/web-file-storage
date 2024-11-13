@@ -1,21 +1,18 @@
 package com.pecodigos.web_file_storage.users.services;
 
+import com.pecodigos.web_file_storage.exceptions.InvalidUserIdException;
 import com.pecodigos.web_file_storage.exceptions.UserAlreadyExistsException;
-import com.pecodigos.web_file_storage.users.dtos.LoginDTO;
-import com.pecodigos.web_file_storage.users.dtos.RegisterDTO;
-import com.pecodigos.web_file_storage.users.entities.User;
-import com.pecodigos.web_file_storage.users.enums.Role;
+import com.pecodigos.web_file_storage.exceptions.UserNotFoundException;
+import com.pecodigos.web_file_storage.users.dtos.UserDTO;
+import com.pecodigos.web_file_storage.users.dtos.mapper.UserMapper;
 import com.pecodigos.web_file_storage.users.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,82 +20,45 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public User getCurrentUser() {
-        return userRepository
+    public UserDTO getCurrentUser() {
+        return userMapper.toDTO(userRepository
                 .findByUsername(SecurityContextHolder
                         .getContext()
                         .getAuthentication().getName())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                .orElseThrow(UserNotFoundException::new));
     }
 
-    public Optional<User> getUserById(UUID id) {
-        return userRepository.findById(id);
+    public UserDTO getUserById(UUID id) {
+        return userRepository.findById(id)
+                .map(userMapper::toDTO)
+                .orElseThrow(InvalidUserIdException::new);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> list() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toDTO)
+                .toList();
     }
 
-    public User loginUser(LoginDTO loginDTO) {
-        Optional<User> optionalUser = userRepository.findByUsername(loginDTO.username());
-
-        if (optionalUser.isEmpty()) {
-            throw new BadCredentialsException("Invalid username or password.");
-        }
-        var user = optionalUser.get();
-
-        if (!passwordEncoder.matches(loginDTO.password(), user.getPassword())) {
-            throw new BadCredentialsException("Invalid username or password.");
-        }
-
-        return user;
-    }
-
-    public User registerUser(RegisterDTO registerDTO) {
-        if (userRepository.findByUsername(registerDTO.username()).isPresent()) {
+    public UserDTO update(UUID id, UserDTO userDTO) {
+        if (userRepository.findByUsername(userDTO.username()).isPresent()) {
             throw new UserAlreadyExistsException("Username already taken.");
         }
 
-        if (userRepository.findByEmail(registerDTO.email()).isPresent()) {
+        if (userRepository.findByEmail(userDTO.email()).isPresent()) {
             throw new UserAlreadyExistsException("Email already taken.");
         }
 
-        var user = User.builder()
-                .name(registerDTO.name())
-                .username(registerDTO.username())
-                .email(registerDTO.email())
-                .password(passwordEncoder.encode(registerDTO.password()))
-                .role(registerDTO.role() != null ? registerDTO.role() : Role.COMMON)
-                .build();
-
-        return userRepository.save(user);
-    }
-
-    public User updateUser(UUID id, RegisterDTO registerDTO) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
-            throw new NoSuchElementException("User not found.");
-        }
-        var user = optionalUser.get();
-        user.setName(registerDTO.name());
-        user.setUsername(registerDTO.username());
-        user.setEmail(registerDTO.email());
-        user.setPassword(registerDTO.password());
-        user.setRole(registerDTO.role());
-
-        return userRepository.save(user);
-    }
-
-    public void deleteUser(UUID id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
-            throw new NoSuchElementException("User not found.");
-        }
-        userRepository.delete(optionalUser.get());
+        return userRepository.findById(id)
+                .map(data -> {
+                    data.setUsername(userDTO.username());
+                    data.setEmail(userDTO.email());
+                    data.setPassword(passwordEncoder.encode(userDTO.password()));
+                    return userMapper.toDTO(data);
+                }).orElseThrow(() -> new NoSuchElementException("No user found with that ID."));
     }
 }

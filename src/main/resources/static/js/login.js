@@ -22,7 +22,7 @@ async function handleLogin(event) {
     try {
         console.log("Payload being sent:", JSON.stringify(payload));
 
-        const response = await fetch("/api/auth/login", {
+        const response = await fetch("https://api.zapdrive.shop/api/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

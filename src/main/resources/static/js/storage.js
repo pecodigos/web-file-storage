@@ -17,7 +17,7 @@ document.getElementById("uploadButton").addEventListener("click", async function
         formData.append("file", file);
 
         try {
-            const response = await fetch('/api/files/upload', {
+            const response = await fetch('https://api.zapdrive.shop/api/files/upload', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
@@ -45,7 +45,7 @@ document.getElementById("uploadButton").addEventListener("click", async function
 // Load the list of files
 async function loadFiles() {
     try {
-        const response = await fetch('/api/files/', {
+        const response = await fetch('https://api.zapdrive.shop/api/files/', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
@@ -134,7 +134,7 @@ function displayFiles(files) {
 async function downloadFile(fileName) {
     try {
         const token = localStorage.getItem('jwtToken');
-        const response = await fetch(`/api/files/download/${fileName}`, {
+        const response = await fetch(`https://api.zapdrive.shop/api/files/download/${fileName}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -167,7 +167,7 @@ async function downloadFile(fileName) {
 async function deleteFile(fileId) {
     try {
         const token = localStorage.getItem('jwtToken');
-        const response = await fetch(`/api/files/${fileId}`, {
+        const response = await fetch(`https://api.zapdrive.shop/api/files/${fileId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,

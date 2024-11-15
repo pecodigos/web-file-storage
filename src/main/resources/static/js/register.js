@@ -17,7 +17,7 @@ async function handleRegistration(event) {
     };
 
     try {
-        const response = await fetch("/api/auth/register", {
+        const response = await fetch("https://api.zapdrive.shop/api/auth/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

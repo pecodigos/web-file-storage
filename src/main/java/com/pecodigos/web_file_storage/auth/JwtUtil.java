@@ -12,16 +12,17 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret.key}")
     private String secretKey;
 
-    private static final long EXPIRATION_TIME = 86400000; // 1 day
+    @Value("${jwt.expiration}")
+    private long expirationDate;
 
     public String generateToken(String username) {
         return JWT.create()
                 .withSubject(username)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .withExpiresAt(new Date(System.currentTimeMillis() + expirationDate))
                 .sign(Algorithm.HMAC256(secretKey));
     }
 

@@ -1,10 +1,30 @@
 services:
-  postgresql:
-    container_name: web_file_storage
+  web_file_storage:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - spring.env
+    ports:
+      - "8080:8080"
+    networks:
+      - zap-network
+    depends_on:
+      - postgres
+
+  postgres:
     image: postgres
+    env_file:
+      - spring.env
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=web_file_storage
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - zap-network
+
+networks:
+  zap-network:
+
+volumes:
+  postgres_data:

@@ -36,7 +36,16 @@ public class FileService {
             throw new InvalidFileNameException("Invalid file name: " + fileName);
         }
 
-        Path targetLocation = this.fileStorageLocation.resolve(fileName);
+        Path directoryPath = Paths.get("uploads", userDTO.id().toString());
+
+        if (!Files.exists(directoryPath)) {
+            var createdFolder = new java.io.File("uploads/" + userDTO.id()).mkdir();
+            if (!createdFolder) {
+                throw new IOException("Failed to create directory: " + directoryPath);
+            }
+        }
+
+        var targetLocation = this.fileStorageLocation.resolve(userDTO.id() + "/" + fileName);
 
         if (Files.exists(targetLocation)) {
             fileName = System.currentTimeMillis() + "_" + fileName;

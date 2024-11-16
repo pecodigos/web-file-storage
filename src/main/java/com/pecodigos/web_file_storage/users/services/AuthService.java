@@ -1,6 +1,5 @@
 package com.pecodigos.web_file_storage.users.services;
 
-import com.pecodigos.web_file_storage.auth.JwtUtil;
 import com.pecodigos.web_file_storage.exceptions.InvalidUsernameOrPasswordException;
 import com.pecodigos.web_file_storage.exceptions.UserAlreadyExistsException;
 import com.pecodigos.web_file_storage.users.dtos.AuthDTO;
@@ -13,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -22,7 +22,6 @@ public class AuthService {
     private UserRepository userRepository;
     private UserMapper userMapper;
     private BCryptPasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
 
     public AuthDTO login(AuthDTO authDTO) {
         var optionalUser = userRepository.findByUsername(authDTO.username());
@@ -57,6 +56,25 @@ public class AuthService {
                 .build();
 
         return userMapper.toDto(userRepository.save(user));
+    }
+
+
+    public UserDTO update(UserDTO userDTO) {
+        if (userRepository.findByUsername(userDTO.username()).isPresent()) {
+            throw new UserAlreadyExistsException("Username already taken.");
+        }
+
+        if (userRepository.findByEmail(userDTO.email()).isPresent()) {
+            throw new UserAlreadyExistsException("Email already taken.");
+        }
+
+        return userRepository.findById(userDTO.id())
+                .map(data -> {
+                    data.setUsername(userDTO.username());
+                    data.setEmail(userDTO.email());
+                    data.setPassword(passwordEncoder.encode(userDTO.password()));
+                    return userMapper.toDto(data);
+                }).orElseThrow(() -> new NoSuchElementException("No user found with that ID."));
     }
 
     public void delete(UUID id) {

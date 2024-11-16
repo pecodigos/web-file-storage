@@ -46,8 +46,13 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(userDTO));
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<Object> update(@Valid @RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(authService.update(userDTO));
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable(name = "id") UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") UUID id) {
         authService.delete(id);
         return ResponseEntity.noContent().build();
     }

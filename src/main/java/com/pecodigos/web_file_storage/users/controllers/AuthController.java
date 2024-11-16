@@ -1,6 +1,6 @@
 package com.pecodigos.web_file_storage.users.controllers;
 
-import com.pecodigos.web_file_storage.auth.JwtUtil;
+import com.pecodigos.web_file_storage.security.auth.JwtUtil;
 import com.pecodigos.web_file_storage.users.dtos.AuthDTO;
 import com.pecodigos.web_file_storage.users.dtos.UserDTO;
 import com.pecodigos.web_file_storage.users.services.AuthService;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -47,13 +48,20 @@ public class AuthController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Object> update(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> update(@Valid @RequestBody UserDTO userDTO, Principal principal) {
+        if (!authService.isAuthorized(userDTO.id(), principal.getName())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have access to this account.");
+        }
         return ResponseEntity.ok(authService.update(userDTO));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") UUID id) {
-        authService.delete(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> delete(AuthDTO authDTO, Principal principal) {
+        if (!authService.isAuthorized(authDTO.id(), principal.getName())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have access to this account.");
+        }
+
+        authService.delete(authDTO);
         return ResponseEntity.noContent().build();
     }
 }

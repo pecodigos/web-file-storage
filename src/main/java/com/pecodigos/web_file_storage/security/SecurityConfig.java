@@ -1,6 +1,6 @@
-package com.pecodigos.web_file_storage.config.security;
+package com.pecodigos.web_file_storage.security;
 
-import com.pecodigos.web_file_storage.auth.JwtAuthenticationFilter;
+import com.pecodigos.web_file_storage.security.auth.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.pecodigos.web_file_storage.config.security;
+package com.pecodigos.web_file_storage.security;
 
 import com.pecodigos.web_file_storage.users.entities.User;
 import com.pecodigos.web_file_storage.users.repositories.UserRepository;

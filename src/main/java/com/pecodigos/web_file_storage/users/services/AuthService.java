@@ -58,7 +58,6 @@ public class AuthService {
         return userMapper.toDto(userRepository.save(user));
     }
 
-
     public UserDTO update(UserDTO userDTO) {
         if (userRepository.findByUsername(userDTO.username()).isPresent()) {
             throw new UserAlreadyExistsException("Username already taken.");
@@ -78,7 +77,13 @@ public class AuthService {
                 }).orElseThrow(() -> new NoSuchElementException("No user found with that ID."));
     }
 
-    public void delete(UUID id) {
-        userRepository.deleteById(id);
+    public void delete(AuthDTO authDTO) {
+        userRepository.deleteById(authDTO.id());
+    }
+
+    public boolean isAuthorized(UUID id, String username) {
+        return userRepository.findById(id)
+                .map(user -> user.getUsername().equals(username))
+                .orElse(false);
     }
 }

@@ -1,4 +1,4 @@
-package com.pecodigos.web_file_storage.auth;
+package com.pecodigos.web_file_storage.security.auth;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

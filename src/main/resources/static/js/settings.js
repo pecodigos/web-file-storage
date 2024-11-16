@@ -1,6 +1,5 @@
 async function handleUpdate(event) {
     event.preventDefault(); // Prevent form submission
-    console.log("Button clicked")
 
     // Get form input values
     const name = document.getElementById("nameInput").value;

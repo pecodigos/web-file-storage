@@ -15,6 +15,8 @@ FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
+RUN mkdir -p /app/uploads && chmod -R 755 /app/uploads
+
 # Copy the built JAR file from the builder stage
 COPY --from=builder /app/target/web_file_storage-0.0.1-SNAPSHOT.jar app.jar
 

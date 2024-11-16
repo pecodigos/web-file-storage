@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/files/**").authenticated()
+                        .requestMatchers("/api/files/**", "/api/auth/update").authenticated()
                         .anyRequest().permitAll()
                 )
                 .userDetailsService(retrieveUserService)

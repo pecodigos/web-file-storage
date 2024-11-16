@@ -1,5 +1,4 @@
-// Function to handle registration
-async function handleRegistration(event) {
+async function handleUpdate(event) {
     event.preventDefault(); // Prevent form submission
 
     // Get form input values
@@ -40,11 +39,11 @@ async function handleRegistration(event) {
     }
 }
 
-document.querySelector("button[type='submit']").addEventListener("click", handleRegistration);
+document.querySelector("button[type='submit']").addEventListener("click", handleUpdate);
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        handleRegistration(event)
+        handleUpdate(event)
             .then()
             .catch((error) => console.error("Error during user update:", error));
     }

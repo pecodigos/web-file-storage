@@ -17,7 +17,7 @@ async function handleUpdate(event) {
 
     try {
         const response = await fetch("https://api.zapdrive.shop/api/auth/update", {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },

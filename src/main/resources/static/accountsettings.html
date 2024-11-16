@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="/assets/box.png" type="image/x-icon">
+    <title>settings</title>
+</head>
+<body>
+<header class="index-header">
+    <a href="index.html">
+        <div class="title-header">
+            <img id="box-image" src="assets/box.png" alt="Box icon">
+            <h1>zap drive</h1>
+        </div>
+    </a>
+    <div>
+    <a class="page-buttons" href="storage.html">storage</a>
+        <a class="page-buttons" onclick="logout()">logout</a>
+    </div>
+</header>
+<main class="main-container">
+    <section class="login-form-section">
+        <div>
+            <h2 class="register-title">account settings</h2>
+        </div>
+        <section class="sub-login-form-section">
+            <div class="inputs-div">
+                <label>
+                    <b class="input-info">name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp; </b><input type="text" id="nameInput">
+                </label>
+                <label>
+                    <b class="input-info">username &nbsp; -> &nbsp; </b><input type="text" id="usernameInput">
+                </label>
+                <label>
+                    <b class="input-info">e-mail &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp; </b><input type="email" id="emailInput">
+                </label>
+                <label>
+                    <b class="input-info">password &nbsp; -> &nbsp; </b><input type="password" id="passwordInput">
+                </label>
+            </div>
+        </section>
+        <button type="submit">update</button>
+    </section>
+</main>
+<footer class="index-footer">
+    Made by <a href="https://github.com/pecodigos" onclick="window.open(this.href, '_blank'); return false;"> /pecodigos</a>
+</footer>
+<script src="js/settings.js"></script>
+</body>
+</html>

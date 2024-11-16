@@ -70,6 +70,7 @@ public class AuthService {
 
         return userRepository.findById(userDTO.id())
                 .map(data -> {
+                    data.setName(userDTO.name());
                     data.setUsername(userDTO.username());
                     data.setEmail(userDTO.email());
                     data.setPassword(passwordEncoder.encode(userDTO.password()));

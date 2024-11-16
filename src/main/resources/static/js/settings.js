@@ -46,6 +46,6 @@ document.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
         handleRegistration(event)
             .then()
-            .catch((error) => console.error("Error during registration:", error));
+            .catch((error) => console.error("Error during user update:", error));
     }
 });

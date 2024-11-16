@@ -1,5 +1,6 @@
 async function handleUpdate(event) {
     event.preventDefault(); // Prevent form submission
+    console.log("Button clicked")
 
     // Get form input values
     const name = document.getElementById("nameInput").value;
@@ -39,7 +40,7 @@ async function handleUpdate(event) {
     }
 }
 
-document.querySelector("button[type='submit']").addEventListener("click", handleUpdate);
+document.getElementById("updateButton").addEventListener("click", handleUpdate);
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {

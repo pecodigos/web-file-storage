@@ -26,7 +26,7 @@ async function handleRegistration(event) {
         });
 
         if (response.ok) {
-            window.location.href = "login.html";
+            window.location.href = "/login";
         } else if (response.status === 401) {
             alert("Username or email already taken.");
         }

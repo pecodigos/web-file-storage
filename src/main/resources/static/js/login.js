@@ -35,7 +35,7 @@ async function handleLogin(event) {
             // Check if the token is received
             if (data.token) {
                 localStorage.setItem('jwtToken', data.token);
-                window.location.href = "storage.html";
+                window.location.href = "/storage";
             } else {
                 alert("Login failed. Please try again.");
             }

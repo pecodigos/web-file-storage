@@ -1,17 +1,12 @@
 async function handleUpdate(event) {
     event.preventDefault(); // Prevent form submission
 
-    // Get form input values
-    const name = document.getElementById("nameInput").value;
     const username = document.getElementById("usernameInput").value;
-    const email = document.getElementById("emailInput").value;
     const password = document.getElementById("passwordInput").value;
 
     // Create the request payload
     const updateData = {
-        name: name,
         username: username,
-        email: email,
         password: password
     };
 

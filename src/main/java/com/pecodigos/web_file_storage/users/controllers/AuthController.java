@@ -47,7 +47,7 @@ public class AuthController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Object> update(@Valid @RequestBody UserDTO userDTO, Principal principal) {
+    public ResponseEntity<Object> update(@RequestBody UserDTO userDTO, Principal principal) {
         if (!authService.isAuthorized(userDTO.id(), principal.getName())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have access to this account.");
         }
